@@ -3,6 +3,15 @@
 Repositório de front-end do app LoboCozinha contendo os templates HTML e os arquivos estáticos (CSS, imagens) que serão utilizados no repositório do back-end (Django).
 
 
+## Sumário
+
+- [Visão geral](#visao-geral)
+- [Estrutura](#estrutura)
+- [Como integrar no back-end (Django)](#como-integrar-no-back-end-django)
+- [Testes locais dos templates (sem Django)](#testes-locais-dos-templates-sem-django)
+- [Licença](#licenca)
+
+
 ## Visão geral
 
 Este repositório concentra:
