@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Landing Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="./static/loboCozinha/css/base.css">
+</head>
+<body>
+    <div class="basebody">
+        {% include 'ui/header/index.html' %}
+        <main>
+            {% block content %} {% endblock %}
+        </main>
+        {% include 'ui/footer/index.html' %}
+    </div>
+</body>
+</html>

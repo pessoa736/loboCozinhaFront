@@ -1,0 +1,15 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.basebody {
+    font-family: 'Quicksand', sans-serif;
+    background-color: #3f2305;
+    height: 100%;
+    width: 100%;
+}   

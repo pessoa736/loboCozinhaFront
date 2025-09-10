@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        .testMenu {
+            position: fixed;
+            background-color: #00000044;
+            backdrop-filter: blur(15px) saturate(180%);
+            box-shadow: 0 4px 8px 0 #00000088, 0 6px 20px 0 #00000088;
+            margin: 1%;
+            min-width: 150px;
+            min-height: 50px;
+            border-radius: 15px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1%;
+            box-sizing: border-box;
+            z-index: 1000;
+            border: 1px solid #ffffff22;
+            
+            select, button{
+                border-radius: 15px;
+                width: 100%;
+                height: 20px;
+                border: none;
+                background-color: #00000000;
+                color: white;
+                border: 2px solid #ffffff66;
+
+                
+            }
+
+            select:hover, button:hover, option:hover {
+                    background-color: #ffffff22;
+            }
+            select:focus, button:focus {
+                    outline: none;
+                    border: 1px solid #ffffff88;
+                    background-color: #ffffff11;
+            }
+
+            option {
+                background-color: #00000011;
+                color: black;
+            }
+
+            div {
+                margin-bottom: 10px;
+                width: 100%;
+                gap: 3px;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .componentArea {
+            margin: 1%;
+            padding: 1%;
+            justify-content: center;
+            align-content: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .bodyTest {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        .load {
+            color: white;
+            font-size: 30px;
+            text-align: center;
+            text-justify: center;
+            margin-top: 20%;
+        }
+    </style>
+</head>
+<body class="bodyTest">
+    <div class="componentArea"></div>
+
+    <div class="testMenu">
+        <div>
+            <h3 ">Testar Componente:</h3>
+            <select id="componentSelect">
+                <option value="base">Base</option>
+                <option value="header">Header</option>
+                <option value="footer">Footer</option>
+            </select>
+            <button id="loadBtn" type="button">Load</button>
+        </div>
+        <div>
+            <h3 style="margin-right: 10px;">reposicionar menu</h3>
+            <select id="positionSelectX">
+                <option value="direita">direita</option>
+                <option value="esquerda">esquerda</option>
+            </select>
+
+            <select id="positionSelectY">
+                <option value="cima">cima</option>
+                <option value="baixo">baixo</option>
+            </select>
+
+            <button type="button" id="movebtn">Mover</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import Component from './render.test.js';
+
+        function loadComponent() {
+            console.log('Loading component...');
+            document.querySelector('.componentArea').innerHTML = '<p class="load">Loading...</p>';
+            const selected = document.getElementById('componentSelect').value;
+            Component(selected).then(html => {
+                console.log('html do ' + selected + ':', html);
+                document.querySelector('.componentArea').innerHTML = html;
+            });
+        }
+
+        function mudarMenuDeLado() {
+            const posX = document.getElementById('positionSelectX').value;
+            const posY = document.getElementById('positionSelectY').value;
+            const menu = document.querySelector('.testMenu');
+            if (posX === 'esquerda') menu.style.left = '0'; else menu.style.left = '';
+            if (posX === 'direita') menu.style.right = '0'; else menu.style.right = '';
+            if (posY === 'cima') menu.style.top = '0'; else menu.style.top = '';
+            if (posY === 'baixo') menu.style.bottom = '0'; else menu.style.bottom = '';
+        }
+
+        document.getElementById('loadBtn').addEventListener('click', loadComponent);
+        loadComponent();
+        document.getElementById('movebtn').addEventListener('click', mudarMenuDeLado);
+        mudarMenuDeLado();
+    </script>
+    </div>
+</body>
+</html>
