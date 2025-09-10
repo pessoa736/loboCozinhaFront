@@ -64,6 +64,7 @@
             padding: 1%;
             justify-content: center;
             align-content: center;
+            display: flex;
             height: 100vh;
             box-sizing: border-box;
         }
@@ -85,15 +86,15 @@
     </style>
 </head>
 <body class="bodyTest">
+    
+    
+    
     <div class="componentArea"></div>
 
     <div class="testMenu">
         <div>
             <h3 ">Testar Componente:</h3>
             <select id="componentSelect">
-                <option value="base">Base</option>
-                <option value="header">Header</option>
-                <option value="footer">Footer</option>
             </select>
             <button id="loadBtn" type="button">Load</button>
         </div>
@@ -113,8 +114,24 @@
         </div>
     </div>
 
+
+
     <script type="module">
         import Component from './render.test.js';
+
+        await fetch('./render.test.json')
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('componentSelect');
+                data.forEach(component => {
+                    const option = document.createElement('option');
+                    option.value = component;
+                    option.textContent = component;
+                    select.appendChild(option);
+                });
+                loadComponent();
+            })
+            .catch(error => console.error('Error loading component list:', error));
 
         function loadComponent() {
             console.log('Loading component...');
