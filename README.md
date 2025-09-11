@@ -3,17 +3,6 @@
 Repositório de front-end do app LoboCozinha contendo os templates HTML e os arquivos estáticos (CSS, imagens) que serão utilizados no repositório do back-end (Django).
 
 
-## Sumário
-
-- [Visão geral](#visao-geral)
-- [Estrutura](#estrutura)
-- [Guia do Front: criar templates e testar](#guia-do-front-criar-templates-e-testar)
-- [Guia do Back: como integrar no back-end (Django)](#guia-do-back-como-integrar-no-back-end-django)
-- [Testes locais dos templates (sem Django)](#testes-locais-dos-templates-sem-django)
-- [Erros comuns e dicas](#erros-comuns-e-dicas)
-- [Licença](#licenca)
-
-
 ## Visão geral
 
 Este repositório concentra:
@@ -27,18 +16,21 @@ Objetivo: manter a camada de apresentação desacoplada e fácil de integrar no 
 Contexto do projeto: todos os participantes estão em um processo seletivo de uma empresa júnior (EJECT). Este site (repositórios de back e front) é o método de avaliação da etapa atual. A maioria está aprendendo — este README é didático e passo a passo para reduzir dúvidas.
 
 
+## Sumário
+
+- [Estrutura](#estrutura)
+- [Guia do Front: criar templates e testar](#guia-do-front-criar-templates-e-testar)
+- [Guia do Back: como integrar no back-end (Django)](#guia-do-back-como-integrar-no-back-end-django)
+- [Testes locais dos templates (sem Django)](#testes-locais-dos-templates-sem-django)
+- [Erros comuns e dicas](#erros-comuns-e-dicas)
+- [Licença](#licenca)
+
+
+
+
 ## Estrutura
 
 Visão por perfil de uso:
-
-### Para quem vai integrar (Back-end)
-
-- Você precisa apenas de dois diretórios: `templates/` e `static/loboCozinha/`.
-- No Django, inclua componentes como por exemplo `{% include 'ui/header/index.html' %}` e referencie estáticos como `{% static 'loboCozinha/.../arquivo.ext' %}`.
-
-- Crie as páginas no seu projeto Django: adicione uma view em `views.py` e um `path` em `urls.py` apontando para o template desejado.
-
-- Arquivos de teste local (`render.test.html`, `render.test.js`, `render.test.json`) são só para o time de front; não são usados em produção.
 
 ### Para quem vai criar mais templates (Front-end)
 
@@ -59,6 +51,16 @@ Mapa rápido das pastas:
 - `render.test.html` — página para visualizar componentes/templates localmente (uso: Front).
 - `render.test.js` — simulador de algumas tags do Django Template Language (uso: Front).
 - `render.test.json` — lista de componentes exibidos no menu do teste (uso: Front).
+
+
+### Para quem vai integrar (Back-end)
+
+- Você precisa apenas de dois diretórios: `templates/` e `static/loboCozinha/`.
+- No Django, inclua componentes como por exemplo `{% include 'ui/header/index.html' %}` e referencie estáticos como `{% static 'loboCozinha/.../arquivo.ext' %}`.
+
+- Crie as páginas no seu projeto Django: adicione uma view em `views.py` e um `path` em `urls.py` apontando para o template desejado.
+
+- Arquivos de teste local (`render.test.html`, `render.test.js`, `render.test.json`) são só para o time de front; não são usados em produção.
 
 
 ## Guia do Front: criar templates e testar
