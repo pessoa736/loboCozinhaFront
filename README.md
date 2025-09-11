@@ -7,6 +7,7 @@ Repositório de front-end do app LoboCozinha contendo os templates HTML e os arq
 
 - [Visão geral](#visao-geral)
 - [Estrutura](#estrutura)
+- [Guia do Front: criar templates e testar](#guia-do-front-criar-templates-e-testar)
 - [Como integrar no back-end (Django)](#como-integrar-no-back-end-django)
 - [Testes locais dos templates (sem Django)](#testes-locais-dos-templates-sem-django)
 - [Licença](#licença)
@@ -25,12 +26,69 @@ Objetivo: manter a camada de apresentação desacoplada e fácil de integrar no 
 
 ## Estrutura
 
-- `templates/` (ex.: `base/index.html`, `ui/header/index.html`)
+- `templates/` 
+	- ... 
+	(ex.: `base/index.html`, `ui/header/index.html`)
+
 - `static/loboCozinha/`
 	- `css/` (ex.: `base.css`, `header.css`, `footer.css`)
 	- `imgs/` (ex.: `logo.png`, `logo2.png`)
+
 - `render.test.html` — página para visualizar componentes/templates localmente.
+
 - `render.test.js` — script que simula algumas tags do Django Template Language (DTL) para testes locais.
+
+
+## Guia do Front: criar templates e testar
+
+Este guia é para quem está desenvolvendo no front e precisa criar novos templates/componentes e testá‑los localmente.
+
+### Como criar um novo template/componente
+
+1) Crie uma pasta para o componente e um `index.html`:
+	 - Caminhos suportados pelo renderizador:
+		 - `templates/ui/{nomeDoComponente}/index.html`, ou
+		 - `templates/{nomeDoComponente}/index.html`.
+2) (Opcional) Adicione CSS/estáticos específicos do componente em:
+	 - `static/loboCozinha/css/{nomeDoComponente}.css`
+	 - `static/loboCozinha/imgs/...` (imagens)
+3) Dentro do `index.html`, use as tags do Django que o simulador entende:
+	 - Carregar estáticos: `{% load static %}`
+	 - Referenciar arquivos: `<link rel="stylesheet" href="{% static 'loboCozinha/css/{nomeDoComponente}.css' %}">`
+	 - Incluir outros componentes: `{% include 'ui/header/index.html' %}` (ou caminhos equivalentes)
+4) Dicas:
+	 - O simulador reescreve `{% static '...' %}` para `./static/...` ao rodar localmente.
+	 - `extends` não é suportado; `block` é apenas ilustrativo no teste local.
+
+Convenções importantes:
+
+- O nome da pasta do componente é o ""“identificador”"" que será usado no teste local.
+- Use nomes simples, sem espaços. Ex.: `header`, `footer`, `button`, `card`.
+- Esse nome deve ser exatamente igual ao cadastrado no `render.test.json` (veja abaixo).
+
+### Como adicionar o componente ao renderizador de teste
+
+1) Abra `render.test.json` na raiz do projeto.
+2) Adicione uma string com o nome do componente na lista. Exemplos:
+
+```
+[
+	"header",
+	"footer",
+	"button",
+	"base",
+	"card"  // novo componente
+]
+```
+
+Regras importantes:
+
+- O valor deve ser exatamente igual ao nome da pasta do template que você criou.
+	- Se você criou `templates/ui/card/index.html`, então adicione `"card"` no `render.test.json`.
+- O renderizador buscará, em ordem:
+	- `./templates/{nome}/index.html`
+	- `./templates/ui/{nome}/index.html`
+- Depois de salvar o JSON, recarregue a página `render.test.html` no navegador; o menu será populado automaticamente a partir desse arquivo.
 
 
 ## Como integrar no back-end (Django)
