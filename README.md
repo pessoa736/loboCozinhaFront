@@ -6,7 +6,6 @@ Repositório de front-end do app LoboCozinha contendo os templates HTML e os arq
 ## Sumário
 
 - [Visão geral](#visao-geral)
-- [Contexto (processo seletivo)](#contexto-processo-seletivo)
 - [Estrutura](#estrutura)
 - [Guia do Front: criar templates e testar](#guia-do-front-criar-templates-e-testar)
 - [Guia do Back: como integrar no back-end (Django)](#guia-do-back-como-integrar-no-back-end-django)
@@ -25,10 +24,7 @@ Este repositório concentra:
 
 Objetivo: manter a camada de apresentação desacoplada e fácil de integrar no back-end.
 
-
-## Contexto (processo seletivo)
-
-Todos que estão neste projeto participam de um processo seletivo de uma empresa júnior EJECT. Este site (os repositórios de back e front) é o método de avaliação da etapa atual. A maioria está aprendendo — por isso este README é didático e passo a passo para não deixar dúvidas.
+Contexto do projeto: todos os participantes estão em um processo seletivo de uma empresa júnior (EJECT). Este site (repositórios de back e front) é o método de avaliação da etapa atual. A maioria está aprendendo — este README é didático e passo a passo para reduzir dúvidas.
 
 
 ## Estrutura
