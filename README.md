@@ -91,7 +91,7 @@ Regras importantes:
 - Depois de salvar o JSON, recarregue a página `render.test.html` no navegador; o menu será populado automaticamente a partir desse arquivo.
 
 
-## Como integrar no back-end (Django)
+## Guia do Back: como integrar no back-end (Django)
 
 Para quem está no back-end: basta copiar estes diretórios para dentro do app do Django.
 
