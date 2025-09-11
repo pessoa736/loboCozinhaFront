@@ -8,7 +8,7 @@ Repositório de front-end do app LoboCozinha contendo os templates HTML e os arq
 - [Visão geral](#visao-geral)
 - [Estrutura](#estrutura)
 - [Guia do Front: criar templates e testar](#guia-do-front-criar-templates-e-testar)
-- [Como integrar no back-end (Django)](#como-integrar-no-back-end-django)
+- [Guia do Back: como integrar no back-end (Django)](#guia-do-back-como-integrar-no-back-end-django)
 - [Testes locais dos templates (sem Django)](#testes-locais-dos-templates-sem-django)
 - [Licença](#licença)
 
