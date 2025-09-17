@@ -1,4 +1,8 @@
 name: Deploy render.test.html to GitHub Pages
+permissions:
+  id-token: write
+  pages: write
+  actions: read
 on:
   push:
     branches:
