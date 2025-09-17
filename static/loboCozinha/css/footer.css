@@ -12,6 +12,7 @@ footer  {
     height: max-content;
     flex-direction: column;
     padding: 20px 5%;
+    height: 767px;
     transition: all 0.6s ease;
 
     @media (max-width: 850px) {

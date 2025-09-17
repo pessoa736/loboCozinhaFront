@@ -2,5 +2,7 @@
     "header", 
     "footer",
     "button",
-    "base"
+    "base",
+    "prato",
+    "carrocel_de_pratos"
 ]

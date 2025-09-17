@@ -3,5 +3,5 @@
 {% load static %}
 <div class="buttonContainer">
     <link rel="stylesheet" href="{% static 'loboCozinha/css/button.css' %}">
-    <button class="butaoReserva">Reserva agora</button>
+    <button class="butaoReserva">{% block text %}{{ text|default:"Reservar" }}{% endblock %}</button>
 </div>

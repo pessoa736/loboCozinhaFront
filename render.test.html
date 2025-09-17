@@ -114,6 +114,14 @@
             </select>
 
             <button type="button" id="movebtn">Mover</button>
+
+            <h3>Selecionar Tema</h3>
+            <select id="themeSelect">
+                <option value="dark">dark</option>
+                <option value="light">light</option>
+            </select>
+
+            <button type="button" id="themebtn">Mudar Tema</button>
         </div>
     </div>
 
@@ -156,6 +164,19 @@
             if (posY === 'baixo') menu.style.bottom = '0'; else menu.style.bottom = '';
         }
 
+        function mudarTema() {
+            const tema = document.getElementById('themeSelect').value;
+            if (tema === 'dark') {
+                document.body.style.backgroundColor = '#000';
+                document.body.style.color = 'white';
+            } else {
+                document.body.style.backgroundColor = '#fff';
+                document.body.style.color = 'black';
+            }
+        }
+
+        document.getElementById('themebtn').addEventListener('click', mudarTema);
+        mudarTema();
         document.getElementById('loadBtn').addEventListener('click', loadComponent);
         loadComponent();
         document.getElementById('movebtn').addEventListener('click', mudarMenuDeLado);

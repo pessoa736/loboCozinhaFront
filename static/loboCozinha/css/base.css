@@ -12,4 +12,8 @@
     background-color: #3f2305;
     height: 100%;
     width: 100%;
+
+    main {
+        min-height: 75vh;
+    }
 }   

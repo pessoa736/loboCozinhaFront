@@ -1,0 +1,67 @@
+
+
+
+<div class="carrossel">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'loboCozinha/css/carrocel_de_pratos.css' %}">
+    <button class="nav left" onclick="moveCarrossel(-1)">&#10094;</button>
+    <div class="carrossel-container" id="carrosselContainer">
+    </div>
+    <button class="nav right" onclick="moveCarrossel(1)">&#10095;</button>
+
+    <script>
+
+        const Pratos = [
+            {
+                prato_imagem: 'loboCozinha/imgs/prato1.png',
+                prato_nome: 'Mousse de Chocolate Belga',
+                prato_descricao: 'Descrição do prato exemplo.',
+                prato_preco: 'R$ 29,90'
+            },
+            {
+                prato_imagem: 'loboCozinha/imgs/prato2.png',
+                prato_nome: 'Prato Exemplo 2',
+                prato_descricao: 'Descrição do prato exemplo 2.',
+                prato_preco: 'R$ 39,90'
+            },
+            {
+                prato_imagem: 'loboCozinha/imgs/prato3.png',
+                prato_nome: 'Prato Exemplo 3',
+                prato_descricao: 'Descrição do prato exemplo 3.',
+                prato_preco: 'R$ 49,90'
+            }
+        ];
+
+        let currentIndex = 0;
+        const carrosselContainer = document.getElementById('carrosselContainer');
+
+        function renderPratos() {
+            carrosselContainer.innerHTML = '';
+            for (i=0; i < 5; i++) {
+                const prato = Pratos[(i + currentIndex) % Pratos.length];
+                const pratoDiv = document.createElement('div');
+                pratoDiv.className = 'prato-item';
+                pratoDiv.innerHTML = `
+                    <img src="{% static '${prato.prato_imagem}' %}" alt="${prato.prato_nome}">
+                    <h3>${prato.prato_nome}</h3>
+                    <p>${prato.prato_descricao}</p>
+                    <span>${prato.prato_preco}</span>
+                `;
+                carrosselContainer.appendChild(pratoDiv);
+            }
+        }
+
+        function updateCarrossel() {
+            const offset = -currentIndex * 100;
+            carrosselContainer.style.transform = `translateX(${offset}%)`;
+        }
+
+        function moveCarrossel(direction) {
+            currentIndex = (currentIndex + direction + Pratos.length) % Pratos.length;
+            renderPratos();
+            updateCarrossel();
+        }
+        renderPratos();
+        updateCarrossel();
+        </script>
+</div>
