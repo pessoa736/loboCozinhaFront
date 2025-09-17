@@ -26,7 +26,7 @@ jobs:
           cp render.test.js public/render.test.js
           cp render.test.json public/render.test.json
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: public
       - name: Deploy to GitHub Pages
