@@ -128,7 +128,26 @@
 
 
     <script type="module">
-        import Component from './render.test.js';
+        import Component, { watchComponent } from './render.test.js';
+
+        function executeScriptsIn(container) {
+            const scripts = Array.from(container.querySelectorAll('script'));
+            for (const oldScript of scripts) {
+                const newScript = document.createElement('script');
+                if (oldScript.type) newScript.type = oldScript.type;
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                    newScript.async = false;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+                // Preserve attributes like 'defer' if needed
+                for (const attr of oldScript.attributes) {
+                    if (attr.name !== 'src' && attr.name !== 'type') newScript.setAttribute(attr.name, attr.value);
+                }
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            }
+        }
 
         await fetch('./render.test.json')
             .then(response => response.json())
@@ -144,13 +163,21 @@
             })
             .catch(error => console.error('Error loading component list:', error));
 
-        function loadComponent() {
+        let watcher = null;
+        async function loadComponent() {
             console.log('Loading component...');
             document.querySelector('.componentArea').innerHTML = '<p class="load">Loading...</p>';
             const selected = document.getElementById('componentSelect').value;
-            Component(selected).then(html => {
-                console.log('html do ' + selected + ':', html);
-                document.querySelector('.componentArea').innerHTML = html;
+            // stop previous watcher if any
+            if (watcher) { try { watcher.stop(); } catch (_) {} watcher = null; }
+            watcher = await watchComponent(selected, {
+                intervalMs: 1000,
+                onRender: (html) => {
+                    console.log('html do ' + selected + ':', html);
+                    const area = document.querySelector('.componentArea');
+                    area.innerHTML = html;
+                    executeScriptsIn(area);
+                }
             });
         }
 
@@ -177,7 +204,8 @@
 
         document.getElementById('themebtn').addEventListener('click', mudarTema);
         mudarTema();
-        document.getElementById('loadBtn').addEventListener('click', loadComponent);
+    document.getElementById('loadBtn').addEventListener('click', loadComponent);
+    document.getElementById('componentSelect').addEventListener('change', loadComponent);
         loadComponent();
         document.getElementById('movebtn').addEventListener('click', mudarMenuDeLado);
         mudarMenuDeLado();

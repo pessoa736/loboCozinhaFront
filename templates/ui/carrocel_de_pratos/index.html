@@ -10,58 +10,203 @@
     <button class="nav right" onclick="moveCarrossel(1)">&#10095;</button>
 
     <script>
-
+        (function(){
+        // Dados do carrossel (Django resolverá {% static %} em produção e o test harness mapeia para ./static)
         const Pratos = [
             {
-                prato_imagem: 'loboCozinha/imgs/prato1.png',
+                prato_imagem: '{% static "loboCozinha/imgs/prato1.png" %}',
                 prato_nome: 'Mousse de Chocolate Belga',
                 prato_descricao: 'Descrição do prato exemplo.',
                 prato_preco: 'R$ 29,90'
             },
             {
-                prato_imagem: 'loboCozinha/imgs/prato2.png',
+                prato_imagem: '{% static "loboCozinha/imgs/prato2.png" %}',
                 prato_nome: 'Prato Exemplo 2',
                 prato_descricao: 'Descrição do prato exemplo 2.',
                 prato_preco: 'R$ 39,90'
             },
             {
-                prato_imagem: 'loboCozinha/imgs/prato3.png',
+                prato_imagem: '{% static "loboCozinha/imgs/prato3.png" %}',
                 prato_nome: 'Prato Exemplo 3',
                 prato_descricao: 'Descrição do prato exemplo 3.',
                 prato_preco: 'R$ 49,90'
+            },
+            {
+                prato_imagem: '{% static "loboCozinha/imgs/prato4.png" %}',
+                prato_nome: 'Prato Exemplo 4',
+                prato_descricao: 'Descrição do prato exemplo 4.',
+                prato_preco: 'R$ 59,90'
+            },
+            {
+                prato_imagem: '{% static "loboCozinha/imgs/prato5.png" %}',
+                prato_nome: 'Prato Exemplo 5',
+                prato_descricao: 'Descrição do prato exemplo 5.',
+                prato_preco: 'R$ 69,90'
+            },
+            {
+                prato_imagem: '{% static "loboCozinha/imgs/prato5.png" %}',
+                prato_nome: 'Prato Exemplo 5',
+                prato_descricao: 'Descrição do prato exemplo 5.',
+                prato_preco: 'R$ 69,90'
             }
         ];
 
-        let currentIndex = 0;
-        const carrosselContainer = document.getElementById('carrosselContainer');
+    let isAnimating = false;
 
-        function renderPratos() {
-            carrosselContainer.innerHTML = '';
-            for (i=0; i < 5; i++) {
-                const prato = Pratos[(i + currentIndex) % Pratos.length];
-                const pratoDiv = document.createElement('div');
-                pratoDiv.className = 'prato-item';
-                pratoDiv.innerHTML = `
-                    <img src="{% static '${prato.prato_imagem}' %}" alt="${prato.prato_nome}">
-                    <h3>${prato.prato_nome}</h3>
-                    <p>${prato.prato_descricao}</p>
-                    <span>${prato.prato_preco}</span>
+        function waitImagesLoaded(container) {
+            const imgs = Array.from(container.querySelectorAll('img'));
+            if (imgs.length === 0) return Promise.resolve();
+            const pending = imgs.filter(img => !img.complete || img.naturalWidth === 0);
+            if (pending.length === 0) return Promise.resolve();
+            return new Promise(resolve => {
+                let left = pending.length;
+                pending.forEach(img => {
+                    img.addEventListener('load', () => { if (--left === 0) resolve(); }, { once: true });
+                    img.addEventListener('error', () => { if (--left === 0) resolve(); }, { once: true });
+                });
+            });
+        }
+
+        function render() {
+            const container = document.getElementById('carrosselContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            const frag = document.createDocumentFragment();
+            Pratos.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'prato-item';
+                item.innerHTML = `
+                    <img src="${p.prato_imagem}" alt="${p.prato_nome}">
+                    <h3>${p.prato_nome}</h3>
+                    <p>${p.prato_descricao || ''}</p>
+                    <span>${p.prato_preco || ''}</span>
                 `;
-                carrosselContainer.appendChild(pratoDiv);
+                frag.appendChild(item);
+            });
+            container.appendChild(frag);
+            waitImagesLoaded(container).then(() => {
+                updateCenterHighlight();
+            });
+        }
+
+        function getStepPx() {
+            const container = document.getElementById('carrosselContainer');
+            const items = container ? container.children : [];
+            if (!container || items.length < 2) {
+                // Fallback: largura do primeiro item
+                const first = items[0];
+                return first ? first.getBoundingClientRect().width : 0;
+            }
+            const a = items[0].getBoundingClientRect();
+            const b = items[1].getBoundingClientRect();
+            // Distância entre centros ou entre lefts (inclui gap)
+            const delta = b.left - a.left;
+            return Math.abs(delta) || a.width; // garante valor > 0
+        }
+
+        function updateCenterHighlight() {
+            const container = document.getElementById('carrosselContainer');
+            if (!container) return;
+            const items = Array.from(container.querySelectorAll('.prato-item'));
+            if (items.length === 0) return;
+            // Baseado na área visível (wrapper .carrossel)
+            const wrapper = container.parentElement || container;
+            const wrapRect = wrapper.getBoundingClientRect();
+            const targetX = wrapRect.left + wrapRect.width / 2;
+            let best = null;
+            let bestDist = Infinity;
+            items.forEach(el => {
+                const r = el.getBoundingClientRect();
+                const cx = r.left + r.width / 2;
+                const dist = Math.abs(cx - targetX);
+                if (dist < bestDist) { bestDist = dist; best = el; }
+            });
+            items.forEach(el => el.classList.remove('is-center'));
+            if (best) best.classList.add('is-center');
+        }
+
+        function moveCarrossel(dir = 1) {
+            // dir = 1 -> próximo (conteúdo desliza para a esquerda)
+            // dir = -1 -> anterior (conteúdo desliza para a direita)
+            const container = document.getElementById('carrosselContainer');
+            if (!container || isAnimating) return;
+            const items = container.children;
+            if (!items || items.length < 2) return;
+
+            const step = getStepPx();
+            if (!step || step <= 0) return;
+
+            isAnimating = true;
+            container.style.willChange = 'transform';
+
+            if (dir === 1) {
+                // Anima para esquerda e, ao finalizar, move o primeiro para o fim
+                container.style.transition = 'transform 0.45s ease';
+                container.style.transform = `translateX(${-step}px)`;
+                const onEnd = () => {
+                    container.removeEventListener('transitionend', onEnd);
+                    // Reordena: primeiro vai para o fim
+                    if (container.firstElementChild) {
+                        container.appendChild(container.firstElementChild);
+                    }
+                    // Reset transform sem animar
+                    container.style.transition = 'none';
+                    container.style.transform = 'translateX(0)';
+                    // Força reflow para aplicar o reset antes de liberar
+                    void container.offsetHeight;
+                    container.style.willChange = '';
+                    isAnimating = false;
+                    updateCenterHighlight();
+                };
+                container.addEventListener('transitionend', onEnd, { once: true });
+            } else {
+                // dir === -1: mover último para o começo imediatamente, deslocar sem transição, e animar de volta para 0
+                if (container.lastElementChild) {
+                    container.insertBefore(container.lastElementChild, container.firstElementChild);
+                }
+                // Coloca deslocado para a esquerda (negativo) sem transição
+                container.style.transition = 'none';
+                container.style.transform = `translateX(${-step}px)`;
+                // Próximo frame: anima de volta para 0 (efeito deslizando para a direita visualmente)
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        container.style.transition = 'transform 0.45s ease';
+                        container.style.transform = 'translateX(0)';
+                        const onEnd = () => {
+                            container.removeEventListener('transitionend', onEnd);
+                            container.style.transition = 'none';
+                            container.style.transform = 'translateX(0)';
+                            void container.offsetHeight;
+                            container.style.willChange = '';
+                            isAnimating = false;
+                            updateCenterHighlight();
+                        };
+                        container.addEventListener('transitionend', onEnd, { once: true });
+                    });
+                });
             }
         }
 
-        function updateCarrossel() {
-            const offset = -currentIndex * 100;
-            carrosselContainer.style.transform = `translateX(${offset}%)`;
+    // Exponha as funções globais para os botões inline (sem sobrescrever se já existirem)
+    if (!window.moveCarrossel) window.moveCarrossel = moveCarrossel;
+    if (!window.render) window.render = render;
+
+        function initCarousel() {
+            render();
+            // Atualiza destaque no resize
+            window.addEventListener('resize', () => {
+                // Aguarda o layout estabilizar
+                requestAnimationFrame(updateCenterHighlight);
+            });
         }
 
-        function moveCarrossel(direction) {
-            currentIndex = (currentIndex + direction + Pratos.length) % Pratos.length;
-            renderPratos();
-            updateCarrossel();
+        // Inicialização automática (funciona mesmo se o HTML for injetado após DOMContentLoaded)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initCarousel, { once: true });
+        } else {
+            initCarousel();
         }
-        renderPratos();
-        updateCarrossel();
+
+        })();
         </script>
 </div>

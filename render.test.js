@@ -6,6 +6,7 @@ function procurarDTLs(html) {
     // include agora suporta: {% include 'ui/button/index.html' with text='Reservar' outro="X" %}
     const include = [/{%\s*include\s*['"](?:\.\/)?(.+?)\/index\.html['"](?:\s+with\s+([^%]+?))?\s*%}/g, "include"]; // group1 = caminho, group2 = params
     const loadStatic = [/{%\s*load\s+static\s*%}/g, "loadStatic"]; 
+    const getStaticPrefix = [/{%\s*get_static_prefix\s*%}/g, "getStaticPrefix"]; 
     
     
     // block: captura nome e conteúdo interno (group2)
@@ -18,7 +19,7 @@ function procurarDTLs(html) {
 
     
     
-    [include, loadStatic, block, staticTag].forEach((r)=>{
+    [include, loadStatic, getStaticPrefix, block, staticTag].forEach((r)=>{
         let regex = r[0];
         let match = regex.exec(html);
         
@@ -57,13 +58,13 @@ function procurarDTLs(html) {
 
 
 
-async function substituirDTLsPorJS(html, DTLs, contextoAtual){
+async function substituirDTLsPorJS(html, DTLs, contextoAtual, opts){
     
     
     // Funções de substituição para cada tipo
     const substituicoes = {
         
-        "include": async (dtl) => {
+    "include": async (dtl) => {
             const params = {};
             if (dtl.paramString) {
                 // Pré-processa occurrences de {% static 'path' %} ou {% static "path" %}
@@ -120,24 +121,26 @@ async function substituirDTLsPorJS(html, DTLs, contextoAtual){
                 });
             }
             const merged = { ...(contextoAtual || {}), ...params };
-            return await Component(dtl.nome, merged);
+            return await Component(dtl.nome, merged, opts);
         },
 
 
         "loadStatic": async () => `<!-- load static -->`,
 
-        "block": async (dtl) => {
+    "block": async (dtl) => {
             
             // processa internamente o conteúdo do bloco, permitindo includes dentro dele
             if (!dtl.inner) return '';
             const internos = procurarDTLs(dtl.inner);
             
-            const processado = await substituirDTLsPorJS(dtl.inner, internos, contextoAtual);
+            const processado = await substituirDTLsPorJS(dtl.inner, internos, contextoAtual, opts);
             return processado;
 
         },
 
-        "static": async (dtl) => `./static/${dtl.nome}`
+    "static": async (dtl) => `./static/${dtl.nome}`
+        ,
+        "getStaticPrefix": async () => `./static/`
 
     };
 
@@ -148,7 +151,7 @@ async function substituirDTLsPorJS(html, DTLs, contextoAtual){
         const handler = substituicoes[dtl.type];
         if (!handler) continue;
         
-        const substituicao = await handler(dtl);
+    const substituicao = await handler(dtl);
         html = html.replace(dtl.original, substituicao);
     
     }
@@ -180,7 +183,23 @@ function substituirVariaveis(html, contexto){
 
 
 // função para carregar components
-export default async function Component(component_escolhido, contexto = {}) {
+export default async function Component(component_escolhido, contexto = {}, opts = {}) {
+    // opts: { trackSet?: Set<string>, cacheBust?: string, fetchOptions?: RequestInit }
+    const track = opts.trackSet;
+    const bust = opts.cacheBust;
+    const baseFetchOptions = { cache: 'no-store', ...(opts.fetchOptions || {}) };
+
+    async function trackedFetch(url) {
+        try {
+            if (track) track.add(url);
+            const urlObj = new URL(url, window.location.href);
+            if (bust) urlObj.searchParams.set('_v', bust);
+            const response = await fetch(urlObj.toString(), baseFetchOptions);
+            return response;
+        } catch (e) {
+            throw e;
+        }
+    }
     const component_urls = [
         `./templates/${component_escolhido}/index.html`,
         `./templates/ui/${component_escolhido}/index.html`
@@ -189,8 +208,8 @@ export default async function Component(component_escolhido, contexto = {}) {
     let lastError = null;
     for (const url of component_urls) {
         try {
-            
-            const response = await fetch(url);
+            if (track) track.add(url);
+            const response = await trackedFetch(url);
             
             if (!response.ok) throw new Error(`HTTP ${response.status} em ${url}`);
             
@@ -216,7 +235,13 @@ export default async function Component(component_escolhido, contexto = {}) {
                 ];
                 let parentData = null; let pErr = null;
                 for (const pu of parentUrls) {
-                    try { const pr = await fetch(pu); if (!pr.ok) throw new Error(`HTTP ${pr.status} em ${pu}`); parentData = await pr.text(); break; } catch (e) { pErr = e; }
+                    try {
+                        if (track) track.add(pu);
+                        const pr = await trackedFetch(pu);
+                        if (!pr.ok) throw new Error(`HTTP ${pr.status} em ${pu}`);
+                        parentData = await pr.text();
+                        break;
+                    } catch (e) { pErr = e; }
                 }
                 if (!parentData) throw pErr || new Error('Parent não encontrado');
 
@@ -228,7 +253,7 @@ export default async function Component(component_escolhido, contexto = {}) {
             }
 
             const encontrados = procurarDTLs(data);
-            let htmlProcessado = await substituirDTLsPorJS(data, encontrados, contexto);
+            let htmlProcessado = await substituirDTLsPorJS(data, encontrados, contexto, opts);
             htmlProcessado = substituirVariaveis(htmlProcessado, contexto);
             return htmlProcessado;
 
@@ -241,4 +266,70 @@ export default async function Component(component_escolhido, contexto = {}) {
     }
     console.error('erro ao encontrar:', lastError);
     return "<span style='color:red;'>Componente não encontrado</span>";
+}
+
+// -------- Auto Reload (pure web) --------
+async function digestText(text) {
+    const enc = new TextEncoder();
+    const buf = enc.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-1', buf);
+    const bytes = new Uint8Array(hashBuffer);
+    return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function fetchTextNoStore(url) {
+    const u = new URL(url, window.location.href);
+    u.searchParams.set('_poll', Date.now().toString());
+    const res = await fetch(u.toString(), { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status} @ ${url}`);
+    return await res.text();
+}
+
+export async function watchComponent(component_escolhido, { contexto = {}, intervalMs = 1000, onRender } = {}) {
+    let stopped = false;
+    let timer = null;
+    let deps = new Map(); // url -> hash
+
+    async function renderAndCollect() {
+        const trackSet = new Set();
+        const html = await Component(component_escolhido, contexto, { trackSet, cacheBust: Date.now().toString() });
+        // compute hashes for tracked urls
+        const newDeps = new Map();
+        for (const url of trackSet) {
+            try {
+                const txt = await fetchTextNoStore(url);
+                const h = await digestText(txt);
+                newDeps.set(url, h);
+            } catch (e) {
+                console.warn('watchComponent: falha ao carregar para hash', url, e);
+            }
+        }
+        deps = newDeps;
+        if (typeof onRender === 'function') onRender(html);
+        return html;
+    }
+
+    async function pollOnce() {
+        for (const [url, oldHash] of deps.entries()) {
+            try {
+                const txt = await fetchTextNoStore(url);
+                const h = await digestText(txt);
+                if (h !== oldHash) {
+                    // change detected -> re-render and restart polling loop
+                    await renderAndCollect();
+                    break;
+                }
+            } catch (e) {
+                console.warn('watchComponent: polling falhou', url, e);
+            }
+        }
+    }
+
+    await renderAndCollect();
+    timer = setInterval(() => { if (!stopped) pollOnce(); }, intervalMs);
+
+    return {
+        stop() { stopped = true; if (timer) clearInterval(timer); },
+        isRunning() { return !stopped; }
+    };
 }
