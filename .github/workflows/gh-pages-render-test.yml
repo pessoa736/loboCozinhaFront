@@ -1,0 +1,34 @@
+name: Deploy render.test.html to GitHub Pages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Copiar componentes UI e página de navegação
+        run: |
+          mkdir -p public/ui/button
+          mkdir -p public/ui/carrocel_de_pratos
+          mkdir -p public/ui/footer
+          mkdir -p public/ui/header
+          cp templates/ui/index.html public/ui/index.html
+          cp templates/ui/button/index.html public/ui/button/index.html
+          cp templates/ui/carrocel_de_pratos/index.html public/ui/carrocel_de_pratos/index.html
+          cp templates/ui/footer/index.html public/ui/footer/index.html
+          cp templates/ui/header/index.html public/ui/header/index.html
+          cp render.test.html public/index.html
+          cp render.test.js public/render.test.js
+          cp render.test.json public/render.test.json
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: public
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
