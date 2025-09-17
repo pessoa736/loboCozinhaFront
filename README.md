@@ -1,6 +1,8 @@
+
 # loboCozinhaFront
 
-Repositório de front-end do app LoboCozinha contendo os templates HTML e os arquivos estáticos (CSS, imagens) que serão utilizados no repositório do back-end (Django).
+Repositório de front-end do app LoboCozinha contendo templates HTML, componentes UI, arquivos estáticos (CSS, imagens) e um sistema de visualização local e via GitHub Pages.
+
 
 
 ## Visão geral
@@ -8,12 +10,16 @@ Repositório de front-end do app LoboCozinha contendo os templates HTML e os arq
 Este repositório concentra:
 
 - Templates HTML prontos para Django em `templates/`.
+- Componentes UI reutilizáveis em `templates/ui/`.
 - Arquivos estáticos em `static/loboCozinha/` (CSS, imagens, etc.).
-- Um pequeno simulador local para visualizar e testar os templates sem subir o projeto Django: `render.test.html` + `render.test.js`.
+- Sistema de visualização local e via GitHub Pages:
+	- `render.test.html` + `render.test.js` para testes locais.
+	- Deploy automático dos componentes e página de navegação no GitHub Pages.
 
-Objetivo: manter a camada de apresentação desacoplada e fácil de integrar no back-end.
+Objetivo: manter a camada de apresentação desacoplada, fácil de integrar no back-end e fácil de visualizar/validar.
 
-Contexto do projeto: todos os participantes estão em um processo seletivo de uma empresa júnior (EJECT). Este site (repositórios de back e front) é o método de avaliação da etapa atual. A maioria está aprendendo — este README é didático e passo a passo para reduzir dúvidas.
+Contexto do projeto: todos os participantes estão em um processo seletivo de uma empresa júnior (EJECT). Este README é didático e passo a passo para reduzir dúvidas.
+
 
 
 ## Sumário
@@ -21,9 +27,58 @@ Contexto do projeto: todos os participantes estão em um processo seletivo de um
 - [Estrutura](#estrutura)
 - [Guia do Front: criar templates e testar](#guia-do-front-criar-templates-e-testar)
 - [Guia do Back: como integrar no back-end (Django)](#guia-do-back-como-integrar-no-back-end-django)
+- [Visualização dos componentes no GitHub Pages](#visualizacao-dos-componentes-no-github-pages)
 - [Testes locais dos templates (sem Django)](#testes-locais-dos-templates-sem-django)
 - [Erros comuns e dicas](#erros-comuns-e-dicas)
 - [Licença](#licenca)
+## Visualização dos componentes no GitHub Pages
+
+O repositório possui um workflow de deploy automático que publica os componentes UI e uma página de navegação no GitHub Pages.
+
+### Como funciona
+
+- Ao fazer push na branch `master`, o workflow `.github/workflows/gh-pages-render-test.yml` copia os arquivos de componentes e a página de navegação para o diretório público.
+- O GitHub Pages exibe:
+	- `/index.html`: visualização principal (pode ser o render.test.html ou página inicial).
+	- `/ui/index.html`: página de navegação dos componentes UI.
+	- `/ui/{componente}/index.html`: cada componente individualmente.
+
+### Como acessar
+
+1. Acesse a URL do GitHub Pages do repositório (exemplo: `https://pessoa736.github.io/loboCozinhaFront/ui/index.html`).
+2. Use a página de navegação para visualizar cada componente separadamente.
+3. Os arquivos estáticos (CSS, imagens) são servidos automaticamente.
+
+### Como adicionar novos componentes à visualização
+
+1. Crie o componente em `templates/ui/{nome}/index.html`.
+2. O workflow irá copiá-lo para `/ui/{nome}/index.html` no deploy.
+3. Adicione o nome do componente em `render.test.json` para aparecer no menu do teste local.
+4. (Opcional) Atualize a página de navegação (`templates/ui/index.html`) para incluir o novo componente.
+
+### Estrutura publicada no Pages
+
+```
+public/
+	index.html                # Página principal (render.test.html)
+	render.test.js            # Simulador local
+	render.test.json          # Lista de componentes
+	ui/
+		index.html              # Página de navegação dos componentes
+		button/index.html       # Componente Button
+		carrocel_de_pratos/index.html # Componente Carrocel de Pratos
+		footer/index.html       # Componente Footer
+		header/index.html       # Componente Header
+	static/
+		loboCozinha/
+			css/
+			imgs/
+```
+
+### Personalização
+
+Você pode editar `templates/ui/index.html` para criar uma navegação personalizada entre os componentes.
+
 
 
 
@@ -170,47 +225,47 @@ urlpatterns = [
 Dica: componentes em `templates/ui/...` são parciais; normalmente você cria uma página (ex.: `pages/home.html`) que inclui esses componentes e usa essa página na sua view.
 
 
+
 ## Testes locais dos templates (sem Django)
 
-Nota: essencial apenas para o Front. O objetivo é validar visualmente os componentes sem subir o Django.
+Essencial para o Front. O objetivo é validar visualmente os componentes sem subir o Django.
 
-Para facilitar a visualização, há um simulador simples baseado em fetch + regex que interpreta um subconjunto das tags do DTL.
+### Como testar localmente
 
-- Abra `render.test.html` em um servidor estático simples (recomendado) para evitar bloqueios do navegador ao usar `fetch()` em arquivos locais.
-	- Exemplo 1 (Python 3):
-		- Entre na pasta do projeto e rode um servidor: `python3 -m http.server 5500`
-		- Acesse no navegador: `http://localhost:5500/render.test.html`
-	- Exemplo 2 (VS Code - Live Server): clique com botão direito em `render.test.html` > “Open with Live Server”.
-- No menu da página, escolha um componente/template (Base, Header, Footer) e clique em "Load" para renderizar.
-- Você pode reposicionar o menu pela UI para não atrapalhar a visualização.
+1. Abra `render.test.html` em um servidor estático simples para evitar bloqueios do navegador ao usar `fetch()` em arquivos locais.
+   - Exemplo 1 (Python 3):
+	 - Entre na pasta do projeto e rode: `python3 -m http.server 5500`
+	 - Acesse: `http://localhost:5500/render.test.html`
+   - Exemplo 2 (VS Code - Live Server): clique com botão direito em `render.test.html` > “Open with Live Server”.
+2. No menu da página, escolha um componente/template e clique em "Load" para renderizar.
+3. Você pode reposicionar o menu pela UI para não atrapalhar a visualização.
 
-O que o simulador faz (`render.test.js`):
+### O que o simulador faz (`render.test.js`)
 
 - Carrega o HTML do componente a partir de:
-	- `./templates/{componente}/index.html`, ou
-	- `./templates/ui/{componente}/index.html`.
-- Procura e processa (por regex) as seguintes tags do DTL:
-	- `{% include '.../index.html' %}` — inclui o HTML de outro componente.
-	- `{% load static %}` — mantido como comentário (apenas marcador).
-	- `{% block nome %}...{% endblock %}` — substituído por um comentário indicando o bloco.
-	- `{% static 'caminho/relativo.ext' %}` — reescrito para `./static/caminho/relativo.ext` para funcionar localmente.
+  - `./templates/{componente}/index.html`, ou
+  - `./templates/ui/{componente}/index.html`.
+- Processa as seguintes tags do DTL:
+  - `{% include '.../index.html' %}` — inclui o HTML de outro componente.
+  - `{% load static %}` — mantido como comentário.
+  - `{% block nome %}...{% endblock %}` — substituído por um comentário.
+  - `{% static 'caminho/relativo.ext' %}` — reescrito para `./static/caminho/relativo.ext`.
 
-Limites conhecidos do simulador:
+### Limites conhecidos
 
 - Não processa `{% extends %}` nem contexto/variáveis do Django.
-- O suporte a `{% block %}` é apenas ilustrativo (não há herança real de templates).
+- O suporte a `{% block %}` é apenas ilustrativo.
 - Caminhos em `{% static %}` devem ser relativos ao diretório `static/` deste repositório.
 
-Como adicionar novos componentes ao teste local:
+### Como adicionar novos componentes ao teste local
 
-1) Crie o arquivo `index.html` do componente em `templates/ui/{nome}/index.html` (ou em `templates/{nome}/index.html`).
-2) Use `{% include '.../index.html' %}` para compor com outros componentes.
-3) Referencie estáticos com `{% static 'loboCozinha/.../arquivo.ext' %}` — o simulador reescreve para `./static/...` localmente.
-4) (Opcional) Adicione a opção no `<select>` de `render.test.html` para facilitar a seleção do novo componente.
+1. Crie o arquivo `index.html` do componente em `templates/ui/{nome}/index.html` (ou em `templates/{nome}/index.html`).
+2. Use `{% include '.../index.html' %}` para compor com outros componentes.
+3. Referencie estáticos com `{% static 'loboCozinha/.../arquivo.ext' %}`.
+4. Adicione o nome no `render.test.json` para aparecer no menu.
+5. (Opcional) Adicione a opção no `<select>` de `render.test.html`.
 
 Exemplo de página completa usando componentes:
-
-Crie `templates/pages/home.html` e inclua componentes do `ui/`:
 
 ```html
 {% load static %}
