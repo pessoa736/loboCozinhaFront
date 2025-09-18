@@ -25,7 +25,7 @@
             z-index: 1000;
             border: 1px solid #ffffff22;
             
-            select, button{
+            .Select, .Button{
                 border-radius: 15px;
                 width: 100%;
                 height: 20px;
@@ -39,28 +39,66 @@
                 font-weight: 900;
             }
 
-            select:hover, button:hover, option:hover {
+            & select:hover, button:hover, option:hover {
                     background-color: #ffffff22;
             }
-            select:focus, button:focus {
+            & select:focus, button:focus {
                     outline: none;
                     border: 1px solid #ffffff88;
                     background-color: #ffffff11;
             }
-
-            option {
+            .hiderButton{
+                width: 100%;
+                border: none;
+            }
+            & option {
                 background-color: #00000011;
                 color: black;
             }
 
-            div {
+            & div {
                 margin-bottom: 10px;
                 width: 100%;
                 gap: 3px;
                 display: flex;
                 flex-direction: column;
             }
+
+            /* header + collapse styles */
+            .menu-header {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                margin-bottom: 8px;
+                user-select: none;
+            }
+            .menu-header h3 {
+                margin: 0;
+                font-family: 'Quicksand', sans-serif;
+                font-weight: 800;
+                font-size: 14px;
+                opacity: 0.9;
+            }
+            .toggle-btn {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                padding: 0;
+                line-height: 28px;
+                text-align: center;
+                border-radius: 10px;
+            }
+            .menu-content { width: 100%; }
         }
+        /* flattened nested selectors */
+        .testMenu.collapsed {
+            padding: 8px 10px;
+            min-height: auto;
+        }
+        .testMenu.collapsed .menu-content { display: none; }
+        
 
         .componentArea {
             margin: 1%;
@@ -95,33 +133,39 @@
     <div class="componentArea"></div>
 
     <div class="testMenu">
-        <div>
-            <h3 ">Testar Componente:</h3>
-            <select id="componentSelect">
-            </select>
-            <button id="loadBtn" type="button">Load</button>
+        <div class="menu-header">
+            <h3 style="margin:0">Menu de Testes</h3>
+            <button id="collapseBtn" class="hiderButton Button" type="button" aria-label="Recolher menu" aria-expanded="true" title="Recolher menu">▾</button>
         </div>
-        <div>
-            <h3 style="margin-right: 10px;">reposicionar menu</h3>
-            <select id="positionSelectX">
-                <option value="direita">direita</option>
-                <option value="esquerda">esquerda</option>
-            </select>
+        <div class="menu-content">
+            <div>
+                <h3>Testar Componente:</h3>
+                <select id="componentSelect" class="Select">
+                </select>
+                <button id="loadBtn" type="button" class="Button">Load</button>
+            </div>
+            <div>
+                <h3 style="margin-right: 10px;">reposicionar menu</h3>
+                <select id="positionSelectX" class="Select">
+                    <option value="direita">direita</option>
+                    <option value="esquerda">esquerda</option>
+                </select>
 
-            <select id="positionSelectY">
-                <option value="cima">cima</option>
-                <option value="baixo">baixo</option>
-            </select>
+                <select id="positionSelectY" class="Select">
+                    <option value="cima">cima</option>
+                    <option value="baixo">baixo</option>
+                </select>
 
-            <button type="button" id="movebtn">Mover</button>
+                <button type="button" id="movebtn" class="Button">Mover</button>
 
-            <h3>Selecionar Tema</h3>
-            <select id="themeSelect">
-                <option value="dark">dark</option>
-                <option value="light">light</option>
-            </select>
+                <h3>Selecionar Tema</h3>
+                <select id="themeSelect" class="Select">
+                    <option value="dark">dark</option>
+                    <option value="light">light</option>
+                </select>
 
-            <button type="button" id="themebtn">Mudar Tema</button>
+                <button type="button" id="themebtn" class="Button">Mudar Tema</button>
+            </div>
         </div>
     </div>
 
@@ -202,6 +246,28 @@
             }
         }
 
+        // collapse/expand menu
+        const testMenu = document.querySelector('.testMenu');
+        const collapseBtn = document.getElementById('collapseBtn');
+        function updateCollapseBtn() {
+            const collapsed = testMenu.classList.contains('collapsed');
+            collapseBtn.setAttribute('aria-expanded', String(!collapsed));
+            collapseBtn.title = collapsed ? 'Expandir menu' : 'Recolher menu';
+            collapseBtn.textContent = collapsed ? '▸' : '▾';
+        }
+        function toggleMenuCollapse() {
+            testMenu.classList.toggle('collapsed');
+            const isCollapsed = testMenu.classList.contains('collapsed');
+            try { localStorage.setItem('testMenuCollapsed', String(isCollapsed)); } catch(_) {}
+            updateCollapseBtn();
+        }
+        // init collapsed state from storage
+        try {
+            const pref = localStorage.getItem('testMenuCollapsed');
+            if (pref === 'true') testMenu.classList.add('collapsed');
+        } catch(_) {}
+        updateCollapseBtn();
+
         document.getElementById('themebtn').addEventListener('click', mudarTema);
         mudarTema();
     document.getElementById('loadBtn').addEventListener('click', loadComponent);
@@ -209,6 +275,8 @@
         loadComponent();
         document.getElementById('movebtn').addEventListener('click', mudarMenuDeLado);
         mudarMenuDeLado();
+        collapseBtn.addEventListener('click', toggleMenuCollapse);
+        document.querySelector('.menu-header').addEventListener('dblclick', toggleMenuCollapse);
     </script>
     </div>
 </body>

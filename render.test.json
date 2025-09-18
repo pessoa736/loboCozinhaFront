@@ -1,4 +1,8 @@
 [
     "carrocel_de_pratos",
-    "pages/home"
+    "pages/home",
+    "base",
+    "footer",
+    "header",
+    "button"
 ]

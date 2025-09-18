@@ -4,10 +4,10 @@
 <div class="carrossel">
     {% load static %}
     <link rel="stylesheet" href="{% static 'loboCozinha/css/carrocel_de_pratos.css' %}">
-    <button class="nav left" onclick="moveCarrossel(-1)">&#10094;</button>
+    <button class="leftbt" onclick="moveCarrossel(-1)">&#10094;</button>
     <div class="carrossel-container" id="carrosselContainer">
     </div>
-    <button class="nav right" onclick="moveCarrossel(1)">&#10095;</button>
+    <button class="rightbt" onclick="moveCarrossel(1)">&#10095;</button>
 
     <script>
         (function(){
@@ -78,8 +78,6 @@
                 item.innerHTML = `
                     <img src="${p.prato_imagem}" alt="${p.prato_nome}">
                     <h3>${p.prato_nome}</h3>
-                    <p>${p.prato_descricao || ''}</p>
-                    <span>${p.prato_preco || ''}</span>
                 `;
                 frag.appendChild(item);
             });
