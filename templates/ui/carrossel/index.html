@@ -1,0 +1,21 @@
+
+
+
+<div class="carrossel">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'loboCozinha/css/carrocel_de_pratos.css' %}">
+    <button class="leftbt">&#10094;</button>
+    <div class="carrossel-container" id="carrosselContainer">
+    </div>
+    <button class="rightbt">&#10095;</button>
+
+    <script src="{% static 'loboCozinha/js/carrossel.js' %}"></script>
+    <!-- Dados do carrossel em JSON; o módulo vai detectar e iniciar sozinho -->
+    <script type="application/json" data-items>
+       {% block carrocel_items %}
+        [
+            { "src": "", "nome": "item1" },
+        ]
+       {% endblock %}
+    </script>
+</div>
