@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="{% static 'loboCozinha/css/formularioDeReserva.css' %}">
 <div class="formulario-de-reserva-container">
     <h1>Faça sua Reserva</h1>
+    <div class="linha"></div>
     <form class="formulario-de-reserva"  method="post">
         <label for="name">Nome:</label>
         <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
@@ -19,6 +20,7 @@
         <label for="time">Hora da Reserva:</label>
         <input type="time" id="time" name="time" required>
 
+        <div class="aviso">Reservas devem ser feitas com no<br> mínimo 24 horas de antecedência.</div>
         <button type="submit">Reservar</button>
     </form>
 </div>
