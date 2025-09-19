@@ -3,13 +3,13 @@
 header {
     position: sticky;
     align-content: center;
-    backdrop-filter: blur(15px) saturate(180%);
+    backdrop-filter: blur(8px) saturate(180%);
     top: 0;
     width: 100%;
     height: 88px;
     padding: 20px 44px;
     z-index: 1000;
-    background-color: #3f2305cf;
+    background-color: #3f2305e6;
     transition: all 0.6s ease;
     border-bottom: 1px solid #ffffff1a;
 
