@@ -13,8 +13,8 @@
     flex-direction: column;
     justify-content: center;
     
-    & h1 { 
-        
+    & h1 {
+        color:#3F2305;
         font-family: Montserrat, sans-serif;
         font-weight: 700;
         line-height: 56px;
