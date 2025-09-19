@@ -193,7 +193,8 @@
             }
         }
 
-        await fetch('./render.test.json')
+    let watcher = null;
+    await fetch('./render.test.json')
             .then(response => response.json())
             .then(data => {
                 const select = document.getElementById('componentSelect');
@@ -206,8 +207,6 @@
                 loadComponent();
             })
             .catch(error => console.error('Error loading component list:', error));
-
-        let watcher = null;
         async function loadComponent() {
             console.log('Loading component...');
             document.querySelector('.componentArea').innerHTML = '<p class="load">Loading...</p>';

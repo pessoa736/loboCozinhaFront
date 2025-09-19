@@ -1,7 +1,9 @@
-[
+[   
+    "pages/façaSuaReserva",
+    "pages/landingPage",
+    "pages/SobreNós",
     "carrossel_de_pratos",
     "carrossel",
-    "pages/home",
     "base",
     "footer",
     "header",

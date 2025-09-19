@@ -1,0 +1,24 @@
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'loboCozinha/css/formularioDeReserva.css' %}">
+<div class="formulario-de-reserva-container">
+    <h1>Faça sua Reserva</h1>
+    <form class="formulario-de-reserva"  method="post">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
+
+        <label for="telephone">Telefone:</label>
+        <input type="tel" id="telephone" name="telephone" placeholder="Digite seu telefone" required>
+
+        <label for="guests">Número de Convidados:</label>
+        <input type="number" id="guests" name="guests" min="1" placeholder="Digite o número de convidados" required>
+
+        <label for="date">Data da Reserva:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="time">Hora da Reserva:</label>
+        <input type="time" id="time" name="time" required>
+
+        <button type="submit">Reservar</button>
+    </form>
+</div>
