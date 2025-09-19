@@ -17,7 +17,7 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Copiar componentes UI e página de navegação
         run: |
-          mkdir -r public/
+          mkdir public/
           cp -r templates/ public/templates
           cp -r static/ public/static
           cp -r render.test.html public/index.html
