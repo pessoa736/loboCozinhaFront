@@ -17,12 +17,12 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Copiar componentes UI e página de navegação
         run: |
-          mkdir public/
-          cp templates/ public/templates
-          cp static/ public/static
-          cp render.test.html public/index.html
-          cp render.test.js public/render.test.js
-          cp render.test.json public/render.test.json
+          mkdir -r public/
+          cp -r templates/ public/templates
+          cp -r static/ public/static
+          cp -r render.test.html public/index.html
+          cp -r render.test.js public/render.test.js
+          cp -r render.test.json public/render.test.json
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
