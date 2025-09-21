@@ -2,32 +2,230 @@
 
 .NossaHistoria {
     width: 100%;
-    height: 900px;
+    display: flex;
+    flex-direction: column;
+    background-color: #DED7C2;
+    color: #3F2305;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(24px, 4vw, 48px);
+    padding: clamp(120px, 8vw, 5%) clamp(73px, 10vw, 10%);
+    transition: all 0.3s ease;
+}
+
+.linhaHorizontal {
     display: flex;
     flex-direction: row;
-    background-color: #DED7C2;
-    padding: 10%;
-    color:#3F2305;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(24px, 5vw, 64px);
+}
 
-
-    & .textHistoria {
-        width: 50%;
-        font-size: 24px;
-        font-weight: 300;
-        
-        & h2 {
-            font-family: Montserrat, sans-serif;
-            font-weight: 700;
-            line-height: 56px;
-            font-size: 64px;
-            margin-bottom: 75px;
-        }
+@media (max-width: 1000px) {
+    .linhaHorizontal {
+        flex-direction: column;
+        text-align: center;
     }
+}
 
-    & img{
-        width: calc(100vw * 492/1600);
-        height: calc(100vw * 492/1600);
+.textHistoria {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+@media (max-width: 1000px) {
+    .textHistoria {
+        align-items: center;
+    }
+}
+
+.textHistoria h2 {
+    font-family: Montserrat, sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: clamp(34px, 6.5vw, 56px);
+    margin-bottom: 75px;
+}
+
+.NossaHistoria p {
+    width: min(100%, 891px);
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: 0;
+}
+
+.NossaHistoria img {
+    width: min(100%, 492px);
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+@media (min-width: 1001px) {
+    .NossaHistoria img {
+        border-radius: 100px;
+    }
+}
+
+
+.circulo {
+    border-radius: 100px;
+    width: 165px;
+    height: 165px;
+    overflow: hidden;
+    background-color: #CAA072;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.diferenciaisDaCasa {
+    background-color: #fff;
+    color: #3F2305;
+    padding: clamp(120px, 8vw, 5%) clamp(73px, 10vw, 10%);
+    display: block;
+}
+
+
+.diferenciaisDaCasa .containerDiferenciais {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    gap: 80px;
+    justify-items: center;
+    justify-content: center;
+}
+
+.diferenciaisDaCasa > h1 {
+    color: #3F2305;
+    font-family: Montserrat, sans-serif;
+    grid-column: 1 / -1;
+    font-size:  64px;
+    line-height: 1.2;
+    margin-bottom: 75px;
+    justify-self: start;
+    text-align: left;
+}
+
+.diferenciaisDaCasa .diferecial {
+    background: #F8F6EF;
+    border-radius: 16px;
+    padding: clamp(16px, 3vw, 24px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    width: min(100%, 260px);
+}
+
+.diferenciaisDaCasa .diferecial > img {
+    width: clamp(64px, 12vw, 120px);
+    height: auto;
+}
+
+
+.diferenciaisDaCasa .diferecial .circulo img {
+    width: clamp(48px, 8vw, 72px);
+    height: auto;
+}
+
+.diferenciaisDaCasa .diferecial h2 {
+    font-size: clamp(16px, 2.5vw, 22px);
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+@media (max-width: 800px) {
+    .diferenciaisDaCasa .containerDiferenciais {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+}
+
+.FeedbackClientes {
+    background-color: #fff;
+    color: #3F2305;
+    padding: clamp(120px, 8vw, 5%) clamp(73px, 10vw, 10%);
+    display: block;
+}
+
+/* Grid centralizado apenas para os cards de feedback */
+.FeedbackClientes .containerFeedback {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    gap: clamp(12px, 2vw, 20px);
+    justify-items: center;
+    justify-content: center;
+}
+
+.FeedbackClientes > h1 {
+    color: #3F2305;
+    font-family: Montserrat, sans-serif;
+    grid-column: 1 / -1;
+    font-size: 64px;
+    line-height: 1.2;
+    margin-bottom: 75px;
+    text-align: left;
+    justify-self: start;
+}
+
+.FeedbackClientes .feedback {
+    background: #F8F6EF;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: clamp(16px, 3vw, 24px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    width: min(100%, 340px);
+}
+
+.FeedbackClientes .feedback img {
+    display: block;
+    height: auto;
+}
+
+/* Primeiro img: avatar do cliente */
+.FeedbackClientes .feedback img:first-of-type {
+    width: clamp(64px, 12vw, 96px);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Segundo img: estrelas da avaliação */
+.FeedbackClientes .feedback img:nth-of-type(2) {
+    width: auto;
+    height: clamp(16px, 3.5vw, 20px);
+}
+
+.FeedbackClientes .feedback p {
+    font-size: clamp(16px, 2.2vw, 18px);
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.FeedbackClientes .feedback span {
+    font-size: clamp(14px, 2vw, 16px);
+    font-weight: 600;
+    color: #3F2305;
+}
+
+@media (max-width: 800px) {
+    .FeedbackClientes .containerFeedback {
+        grid-template-columns: 1fr;
+        justify-items: center;
     }
 }
 

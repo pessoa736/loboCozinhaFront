@@ -3,17 +3,71 @@
 
 {% block content %}
   <link rel="stylesheet" href="{% static 'loboCozinha/css/SobreNós.css' %}">
+  
+  
+  
   <section class="NossaHistoria">
-    <div class="textHistoria">
-      <h2>Nossa História</h2>
-      <p>
-        Fundado em 1990, o Lobo Cozinha tem sido um marco na culinária local, oferecendo pratos autênticos e um ambiente acolhedor. Com uma equipe dedicada e ingredientes frescos, buscamos proporcionar uma experiência gastronômica inesquecível para nossos clientes.
-      </p>
-      <p>
-        Ao longo dos anos, evoluímos nosso cardápio para incluir uma variedade de opções que atendem a todos os gostos, mantendo sempre a qualidade e o sabor que nos tornaram famosos. Nossa missão é continuar sendo um lugar onde amigos e familiares possam se reunir para celebrar bons momentos e desfrutar de excelente comida.
-      </p>
-    </div>
-    <img src="{% static 'loboCozinha/imgs/chefCozinhando.png' %}" alt="Imagem da Nossa História">
+      <div class="linhaHorizontal">
+        <div class="textHistoria">
+          <h2>Nossa História</h2>
+          <p>
+            Fundado em 1990, o Lobo Cozinha tem sido um marco na culinária local, oferecendo pratos autênticos e um ambiente acolhedor. Com uma equipe dedicada e ingredientes frescos, buscamos proporcionar uma experiência gastronômica inesquecível para nossos clientes.
+          </p>
+          <p>
+            Ao longo dos anos, evoluímos nosso cardápio para incluir uma variedade de opções que atendem a todos os gostos, mantendo sempre a qualidade e o sabor que nos tornaram famosos. Nossa missão é continuar sendo um lugar onde amigos e familiares possam se reunir para celebrar bons momentos e desfrutar de excelente comida.
+          </p>
+        </div>
+        <img src="{% static 'loboCozinha/imgs/chefCozinhando.png' %}" alt="Imagem da Nossa História">
+      </div>
+      {% include 'ui/bt_façaSuaReserva/index.html' %}
   </section>
+
+
+
   <section class="diferenciaisDaCasa">
+    <h1>Diferenciais da Casa</h1>
+    <div class="containerDiferenciais">
+      <div class="diferecial">  
+        <div class="circulo">
+          <img src="{% static 'loboCozinha/imgs/ingredientesFrescos.png' %}" alt="Ingredientes Frescos">
+        </div>
+        <h2>Ingredientes Frescos</h2>
+      </div>
+      <div class="diferecial">
+        <div class="circulo">
+          <img src="{% static 'loboCozinha/imgs/chefExperiente.png' %}" alt="Chef Experiente">
+        </div>
+        <h2>Atendimento Personalizado</h2>
+      </div>
+      <div class="diferecial">
+        <div class="circulo">
+          <img src="{% static 'loboCozinha/imgs/ambienteAcolhedor.png' %}" alt="Ambiente Acolhedor">
+        </div>
+        <h2>Ambiente Aconchegante</h2>
+      </div>
+    </div>
+  </section>
+  <section class="FeedbackClientes">
+    <h1>Feedback de clientes</h1>
+    <div class="containerFeedback">
+      <div class="feedback">
+        <img src="{% static 'loboCozinha/imgs/clienteSatisfeito2.png' %}" alt="Cliente Satisfeito">
+        <img src="{% static 'loboCozinha/imgs/5estrelas.png' %}"  alt="5 Estrelas">
+        <p>"Lugar acolhedor e um ambiente fantástico!"</p>
+        <span>- Maria S.</span>
+      </div>
+      <div class="feedback">
+        <img src="{% static 'loboCozinha/imgs/clienteSatisfeito1.png' %}" alt="Cliente Satisfeito">
+        <img src="{% static 'loboCozinha/imgs/5estrelas.png' %}"  alt="5 Estrelas">
+        <p>Atendimento incrível e pratos deliciosos!</p>
+        <span>- João P.</span>
+      </div>
+      <div class="feedback">
+        <img src="{% static 'loboCozinha/imgs/clienteSatisfeito3.png' %}" alt="Cliente Satisfeito">
+        <img src="{% static 'loboCozinha/imgs/5estrelas.png' %}"  alt="5 Estrelas">
+        <p>"Experiência fantástica! Pratos de qualidade."</p>
+        <span>- Ana L.</span>
+      </div>
+    </div>
+  </section>
 {% endblock %}

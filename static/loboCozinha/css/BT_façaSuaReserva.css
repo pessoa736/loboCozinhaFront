@@ -1,0 +1,20 @@
+
+
+
+.façaSuaReserva {
+    width: clamp(min-content, 90%, 209px);
+    height: clamp(min-content, 90%, 48px);
+    background-color: #CAA072;
+    color: #3F2305;
+    border: none;
+    border-radius: 100px;
+    padding: 12px 25px;
+    font-size: 20px;
+    font-weight: 700;
+    font-style: bold;
+    line-height: 100%;
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    justify-self: center;
+}
