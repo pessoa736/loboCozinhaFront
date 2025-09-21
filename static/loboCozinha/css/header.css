@@ -2,52 +2,101 @@
 
 header {
     position: sticky;
-    align-content: center;
-    backdrop-filter: blur(8px) saturate(180%);
     top: 0;
-    width: 100%;
-    height: 88px;
-    padding: 20px 44px;
     z-index: 1000;
-    background-color: #3f2305e6;
-    transition: all 0.6s ease;
+    width: 100%;
+    backdrop-filter: blur(8px) saturate(180%);
+    background-color: #3f2305e6; /* marrom translúcido como no layout */
     border-bottom: 1px solid #ffffff1a;
+    transition: all 0.6s ease;
 
-
+    /* altura fluida e respiro lateral responsivo */
+    min-height: 88px;
+    padding: clamp(10px, 2vw, 20px) clamp(16px, 4vw, 44px);
 
     img {
-        width: 134px;
-        height: 48px;
+        width: clamp(92px, 14vw, 134px);
         transition: all 0.6s ease;
     }
-    ul {
-        height: 23px;
-        list-style: none;
-        display: flex;
-        font-weight: 700;
-        font-size: larger;
-        gap: 38px;
-        text-decoration: none;
-        transition: all 0.6s ease;
 
-        @media (max-width: 900px) {
-            font-size: medium;    
-        }
+    /* container centralizado */
+    div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: clamp(8px, 2vw, 24px);
+        max-width: 1200px;
+        margin: 0 auto;
+        flex-wrap: wrap; /* permite quebrar em 2 linhas no mobile */
+        transition: all 0.6s ease;
+    }
+
+    & nav {
+        width: auto;
+        flex: 1 1 auto; /* cresce entre logo e botão */
+        min-width: 360px; /* evita esmagar os itens e força quebra controlada */
+        order: 2;
+    }
+
+    ul {
+        display: flex;
+        list-style: none;
+        column-gap: clamp(16px, 3.5vw, 40px);
+        row-gap: 8px;
+        flex-wrap: wrap; /* permite quebrar em múltiplas linhas */
+        justify-content: center; /* centraliza os links dentro do nav */
+        font-weight: 700;
+        font-size: clamp(12px, 1.4vw, 18px);
+        align-items: center;
+        padding: 0;
+        margin: 0;
+        height: auto;
+        transition: all 0.6s ease;
     }
 
     a {
         text-decoration: none;
-        color: white;
+        color: #fff;
+        opacity: 0.95;
+        transition: color 0.2s ease, opacity 0.2s ease;
+    }
+    a:hover { opacity: 1; }
+
+    /* Ajustes do botão dentro do header */
+    .buttonContainer { flex: 0 0 auto; order: 3; }
+    .butaoReserva {
+        height: 43px;
+        background-color: #efe7d1; /* tom claro como na imagem */
+        color: #000;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        padding: 10px 22px;
+        white-space: nowrap; /* evita quebrar em duas linhas */
+        width: auto;
+        min-width: 192px;
+        box-shadow: 0 0 0 0 rgba(0,0,0,0);
+    }
+    .butaoReserva:hover {
+        filter: brightness(0.95);
     }
 
-
-    div {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-content: center;
-        transition: all 0.6s ease;
-        align-items: center;
+    @media (max-width: 900px) {
+        /* Usa grid no mobile para layout estável:
+           primeira linha: logo (esq) + botão (dir); segunda linha: nav centralizado */
+        div {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-areas:
+                "logo button"
+                "nav nav";
+            column-gap: 12px;
+            row-gap: 10px;
+        }
+        img { grid-area: logo; }
+        .buttonContainer { grid-area: button; justify-self: end; }
+        & nav { grid-area: nav; width: 100%; min-width: 0; }
+        ul { justify-content: center; }
+        .butaoReserva { height: 41px; font-size: 16px; }
     }
 }
 
