@@ -2,8 +2,8 @@
 
 
 .façaSuaReserva {
-    width: clamp(min-content, 90%, 209px);
-    height: clamp(min-content, 90%, 48px);
+    width: clamp(min-content, 100%, 209px);
+    height: clamp(min-content, 100%, 48px);
     background-color: #CAA072;
     color: #3F2305;
     border: none;
