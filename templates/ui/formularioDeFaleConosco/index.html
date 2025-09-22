@@ -1,0 +1,20 @@
+  
+{% load static %}
+<link rel="stylesheet" href="{% static 'loboCozinha/css/formularioDeFaleConosco.css' %}">
+<div class="formulario-de-reserva-container">
+    <h1>Faça sua Reserva</h1>
+    <div class="linha"></div>
+    <form class="formulario-de-reserva"  method="post">
+        <label for="name">seu nome:</label>
+        <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
+
+        <label for="telephone">Telefone:</label>
+        <input type="tel" id="telephone" name="telephone" placeholder="Digite seu telefone" required>
+
+        <label for="message">mensagem:</label>
+        <textarea id="message" name="message" placeholder="Digite sua mensagem" required></textarea>
+
+        <div class="aviso">Reservas devem ser feitas com no<br> mínimo 24 horas de antecedência.</div>
+        <button type="submit">Reservar</button>
+    </form>
+</div>
