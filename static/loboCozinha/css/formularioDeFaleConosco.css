@@ -8,7 +8,6 @@
     padding-right: calc( 100vw * (321/1600) );
     background-color: #DED7C2;
     color:#3F2305;
-    border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -1,0 +1,16 @@
+{% extends 'base/index.html' %}
+{% load static %}
+
+
+{% block content %}
+  <section class="promocoesEventos">
+    <link rel="stylesheet" href="{% static 'loboCozinha/css/promoçõesEventos.css' %}">
+    
+    <script> var static_Base = "{% static 'loboCozinha/' %}"; </script>
+    <script src="{% static 'loboCozinha/js/promoçõesEventos.js' %}" ></script>
+        <h2>Promoções & Eventos</h2>
+        <div class="promoçõesEventos-container">
+
+        </div>
+  </section>
+{% endblock %}
