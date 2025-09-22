@@ -45,7 +45,8 @@
         width: 100%;
         padding: 5%;
         max-width: calc(100vw * 855/1600);
-        height: calc(100vh * 95/900);
+        height: calc(100vw * 95/900);
+        max-height: 95px;
         color: #737373;
         background-color: transparent;
         border: 1px solid #3F2305;
@@ -63,9 +64,12 @@
 
     & button {
         margin-top: 20px;
-        width: 100%;
-        max-width: calc(100vw * 342/1600);
-        height: calc(100vh * 109/900);
+        width: calc(100vw * 342/1600);
+        max-width: 342px;
+        min-width: 200px;
+        max-height: 109px;
+        min-height: 90px;
+        height: calc(100vw * 109/900);
         background-color: #3F2305;
         color: #FFFFFF;
         font-family: Montserrat, sans-serif;
